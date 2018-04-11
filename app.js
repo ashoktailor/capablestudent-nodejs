@@ -40,14 +40,39 @@ if (cluster.isMaster) {
     app.set('views', __dirname + '/views');
     app.use(bodyParser.urlencoded({extended:false}));
 
+    // Fetch data from DynamoDB
+    var Sync = require('sync');
+    var data = require('./fetchDataModule');
+
+    Sync(function() {
+        var dataTable = data.fetchData.sync();
+    })
+
+    console.log("Got the following data from DynamoDB in app.js: " + dataTable);
+    
     app.get('/', function(req, res) {
         res.render('index', {
             static_path: 'static',
-            theme: process.env.THEME || 'flatly',
+            theme: process.env.THEME || 'amelia',
             flask_debug: process.env.FLASK_DEBUG || 'false'
         });
     });
 
+    app.get('/about', function(req, res) {
+	res.render('about', {
+	    static_path: 'static',
+	    theme: process.env.THEME || 'amelia',
+	    flask_debug: process.env.FLASK_DEBUG || 'false'
+	});
+    });
+
+    app.get('/data', function(req, res) {
+	res.render('data', {
+	    static_path: 'static',
+	    theme: process.env.THEME || 'amelia',
+	    flask_debug: process.env.FLASK_DEBUG || 'false'
+	});
+    });
     app.post('/signup', function(req, res) {
         var item = {
             'email': {'S': req.body.email},
