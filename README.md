@@ -33,4 +33,4 @@ You can get started using the following steps:
 
 Ashok's notes
 1. to package with zip -
-   zip nodejs-demo.zip -r * .[^.]*
+   zip CapableStudent.zipp -r * .[^.]*
